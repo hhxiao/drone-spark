@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"errors"
 )
 
 const SparkApi = "https://api.ciscospark.com/v1"
@@ -136,5 +137,7 @@ func (c *Client) FindRoomIdByName(roomName string) (string, error) {
 			return room.Id, nil
 		}
 	}
-	return "", fmt.Errorf("spark room '%s' does not exist", roomName)
+	msg := fmt.Sprintf("spark room '%s' does not exist", roomName)
+	println(msg)
+	return "", errors.New(msg)
 }

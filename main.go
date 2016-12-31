@@ -44,8 +44,9 @@ func main() {
 ####Build Details
 * **Author:** <@personEmail:{{build.email}}>
 * **Branch:** {{build.branch}}
+* **Commit:** {{build.commit}}
 * **Event:** {{build.event}}
-* **Commit Message:** {{build.message}}
+* **Message:** {{build.message}}
 * [Build Log]({{build.link}})
 * [Commit Log]({{repo.link}}/commit/{{build.commit}})
 `,
