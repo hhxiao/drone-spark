@@ -38,9 +38,9 @@ func main() {
 			EnvVar: "PLUGIN_PERSON_EMAIL",
 		},
 		cli.StringFlag{
-			Name:   "template",
-			Usage:  "spark message template",
-			Value:  `###Build for [{{repo.owner}}/{{repo.name}}]({{repo.link}}) {{build.status}}!!!
+			Name:  "template",
+			Usage: "spark message template",
+			Value: `###Build for [{{repo.owner}}/{{repo.name}}]({{repo.link}}) {{build.status}}!!!
 ####Build Details
 * **Author:** <@personEmail:{{build.email}}>
 * **Branch:** {{build.branch}}
@@ -188,12 +188,12 @@ func run(c *cli.Context) error {
 			Started: c.Int64("job.started"),
 		},
 		Config: Config{
-			AuthToken:      c.String("auth_token"),
-			RoomId:         c.String("room_id"),
-			RoomName:       c.String("room_name"),
-			PersonEmail:    c.String("person_email"),
-			Template:       c.String("template"),
-			Attachment:     c.String("attachment"),
+			AuthToken:   c.String("auth_token"),
+			RoomId:      c.String("room_id"),
+			RoomName:    c.String("room_name"),
+			PersonEmail: c.String("person_email"),
+			Template:    c.String("template"),
+			Attachment:  c.String("attachment"),
 		},
 	}
 	return plugin.Exec()

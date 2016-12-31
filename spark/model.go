@@ -2,14 +2,16 @@ package spark
 
 import "time"
 
+// Message represents a spark message
 type Message struct {
-	RoomId        string    `json:"roomId,omitempty"`
-	ToPersonEmail string    `json:"toPersonEmail,omitempty"`
-	Text          string    `json:"text,omitempty"`
-	Markdown      string    `json:"markdown,omitempty"`
-	Files         string    `json:"files,omitempty"`
+	RoomId        string `json:"roomId,omitempty"`
+	ToPersonEmail string `json:"toPersonEmail,omitempty"`
+	Text          string `json:"text,omitempty"`
+	Markdown      string `json:"markdown,omitempty"`
+	Files         string `json:"files,omitempty"`
 }
 
+// Room represents a spark room
 type Room struct {
 	Id           string    `json:"id"`
 	Title        string    `json:"title"`
@@ -21,6 +23,7 @@ type Room struct {
 	LastActivity time.Time `json:"lastActivity"`
 }
 
+// Rooms represents a spark room list
 type Rooms struct {
-	Items []Room    `json:"items"`
+	Items []Room `json:"items"`
 }

@@ -50,11 +50,12 @@ type (
 	}
 )
 
+// Exec executes the plugin function
 func (p Plugin) Exec() error {
 	payload := spark.Message{
-		ToPersonEmail:      p.Config.PersonEmail,
-		Text:               message(p.Repo, p.Build),
-		Files:              p.Config.Attachment,
+		ToPersonEmail: p.Config.PersonEmail,
+		Text:          message(p.Repo, p.Build),
+		Files:         p.Config.Attachment,
 	}
 
 	if p.Config.Template != "" {
@@ -67,11 +68,11 @@ func (p Plugin) Exec() error {
 	client := spark.NewClient(p.Config.AuthToken)
 
 	if p.Config.RoomName != "" {
-		roomId, err := client.FindRoomIdByName(p.Config.RoomName)
+		room, err := client.FindRoomByName(p.Config.RoomName)
 		if err != nil {
 			return err
 		}
-		payload.RoomId = roomId
+		payload.RoomId = room.Id
 	}
 
 	if p.Config.Attachment == "" || strings.HasPrefix(p.Config.Attachment, "http") {

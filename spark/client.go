@@ -3,6 +3,7 @@ package spark
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -10,14 +11,13 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"errors"
 )
 
-const SparkApi = "https://api.ciscospark.com/v1"
-const SparkRoomsApi = SparkApi + "/rooms"
-const SparkMessagesApi = SparkApi + "/messages"
+const api = "https://api.ciscospark.com/v1"
+const roomsApi = api + "/rooms"
+const messagesApi = api + "/messages"
 
-
+// Client represents a spark client
 type Client struct {
 	accessToken string
 }
@@ -27,12 +27,12 @@ func NewClient(accessToken string) *Client {
 	return &Client{accessToken: accessToken}
 }
 
-// Post a message to spark
+// PostMessage posts a message to spark
 func (c *Client) PostMessage(msg *Message) error {
 	body, _ := json.Marshal(msg)
 	buf := bytes.NewReader(body)
 
-	req, err := http.NewRequest("POST", SparkMessagesApi, buf)
+	req, err := http.NewRequest("POST", messagesApi, buf)
 	if err != nil {
 		return err
 	}
@@ -53,7 +53,7 @@ func (c *Client) PostMessage(msg *Message) error {
 	return nil
 }
 
-// Post a message with attachment to spark
+// PostFileMessage posts a message with attachment to spark
 func (c *Client) PostFileMessage(msg *Message) error {
 	file, err := os.Open(msg.Files)
 	if err != nil {
@@ -86,7 +86,7 @@ func (c *Client) PostFileMessage(msg *Message) error {
 		return err
 	}
 
-	req, err := http.NewRequest("POST", SparkMessagesApi, body)
+	req, err := http.NewRequest("POST", messagesApi, body)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	req.Header.Set("Authorization", "Bearer "+c.accessToken)
 
@@ -102,11 +102,11 @@ func (c *Client) PostFileMessage(msg *Message) error {
 	return err
 }
 
-// Find a spark room id has the specific room name
-func (c *Client) FindRoomIdByName(roomName string) (string, error) {
-	req, err := http.NewRequest("GET", SparkRoomsApi, nil)
+// FindRoomByName returns a spark room with specified name
+func (c *Client) FindRoomByName(roomName string) (*Room, error) {
+	req, err := http.NewRequest("GET", roomsApi, nil)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.Header.Set("Authorization", "Bearer "+c.accessToken)
@@ -116,28 +116,28 @@ func (c *Client) FindRoomIdByName(roomName string) (string, error) {
 	defer resp.Body.Close()
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if resp.StatusCode != 200 {
 		t, _ := ioutil.ReadAll(resp.Body)
-		return "", fmt.Errorf("%d - %s", resp.StatusCode, string(t))
+		return nil, fmt.Errorf("%d - %s", resp.StatusCode, string(t))
 	}
 
 	var rooms Rooms
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	err = json.Unmarshal(body, &rooms)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	for _, room := range rooms.Items {
 		if room.Title == roomName {
-			return room.Id, nil
+			return &room, nil
 		}
 	}
 	msg := fmt.Sprintf("spark room '%s' does not exist", roomName)
 	println(msg)
-	return "", errors.New(msg)
+	return nil, errors.New(msg)
 }
