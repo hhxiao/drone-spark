@@ -3,6 +3,7 @@ package spark
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -10,14 +11,13 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"errors"
 )
 
-const SparkApi = "https://api.ciscospark.com/v1"
-const SparkRoomsApi = SparkApi + "/rooms"
-const SparkMessagesApi = SparkApi + "/messages"
+const api = "https://api.ciscospark.com/v1"
+const roomsApi = api + "/rooms"
+const messagesApi = api + "/messages"
 
-
+// Represents a spark client
 type Client struct {
 	accessToken string
 }
@@ -32,7 +32,7 @@ func (c *Client) PostMessage(msg *Message) error {
 	body, _ := json.Marshal(msg)
 	buf := bytes.NewReader(body)
 
-	req, err := http.NewRequest("POST", SparkMessagesApi, buf)
+	req, err := http.NewRequest("POST", messagesApi, buf)
 	if err != nil {
 		return err
 	}
@@ -86,7 +86,7 @@ func (c *Client) PostFileMessage(msg *Message) error {
 		return err
 	}
 
-	req, err := http.NewRequest("POST", SparkMessagesApi, body)
+	req, err := http.NewRequest("POST", messagesApi, body)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	req.Header.Set("Authorization", "Bearer "+c.accessToken)
 
@@ -104,7 +104,7 @@ func (c *Client) PostFileMessage(msg *Message) error {
 
 // Find a spark room id has the specific room name
 func (c *Client) FindRoomIdByName(roomName string) (string, error) {
-	req, err := http.NewRequest("GET", SparkRoomsApi, nil)
+	req, err := http.NewRequest("GET", roomsApi, nil)
 	if err != nil {
 		return "", err
 	}

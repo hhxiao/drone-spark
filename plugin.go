@@ -50,11 +50,12 @@ type (
 	}
 )
 
+// Exec the plugin function
 func (p Plugin) Exec() error {
 	payload := spark.Message{
-		ToPersonEmail:      p.Config.PersonEmail,
-		Text:               message(p.Repo, p.Build),
-		Files:              p.Config.Attachment,
+		ToPersonEmail: p.Config.PersonEmail,
+		Text:          message(p.Repo, p.Build),
+		Files:         p.Config.Attachment,
 	}
 
 	if p.Config.Template != "" {
