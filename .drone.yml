@@ -1,0 +1,29 @@
+workspace:
+  base: /go
+
+pipeline:
+  test:
+    image: golang:1.7
+    environment:
+      - CGO_ENABLED=0
+    commands:
+      - go vet
+      - go test -cover -coverprofile=coverage.out
+      - go build -ldflags "-s -w -X main.build=$DRONE_BUILD_NUMBER" -a -tags netgo
+
+  latest:
+    image: plugins/docker
+    repo: hhxiao/drone-spark
+    tags: [ "latest", "1.0"]
+    when:
+      branch: master
+      event: push
+
+plugin:
+  name: Spark
+  desc: Send build status notifications via Spark
+  type: notify
+  image: hhxiao/drone-spark
+  labels:
+    - chat
+    - messaging
