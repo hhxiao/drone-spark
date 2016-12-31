@@ -3,7 +3,6 @@ package spark
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,28 +12,31 @@ import (
 	"path/filepath"
 )
 
-const spark_api = "https://api.ciscospark.com/v1"
-const spark_rooms_api = spark_api + "/rooms"
-const spark_messages_api = spark_api + "/messages"
+const SparkApi = "https://api.ciscospark.com/v1"
+const SparkRoomsApi = SparkApi + "/rooms"
+const SparkMessagesApi = SparkApi + "/messages"
+
 
 type Client struct {
 	accessToken string
 }
 
+// NewClient creates and returns a Client instance.
 func NewClient(accessToken string) *Client {
 	return &Client{accessToken: accessToken}
 }
 
+// Post a message to spark
 func (c *Client) PostMessage(msg *Message) error {
 	body, _ := json.Marshal(msg)
 	buf := bytes.NewReader(body)
 
-	req, err := http.NewRequest("POST", spark_messages_api, buf)
+	req, err := http.NewRequest("POST", SparkMessagesApi, buf)
 	if err != nil {
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	req.Header.Set("Authorization", "Bearer " + c.accessToken)
+	req.Header.Set("Authorization", "Bearer "+c.accessToken)
 
 	var h http.Client
 	resp, err := h.Do(req)
@@ -45,11 +47,12 @@ func (c *Client) PostMessage(msg *Message) error {
 	}
 	if resp.StatusCode != 200 {
 		t, _ := ioutil.ReadAll(resp.Body)
-		return errors.New(fmt.Sprintf("%d - %s", resp.StatusCode, string(t)))
+		return fmt.Errorf("%d - %s", resp.StatusCode, string(t))
 	}
 	return nil
 }
 
+// Post a message with attachment to spark
 func (c *Client) PostFileMessage(msg *Message) error {
 	file, err := os.Open(msg.Files)
 	if err != nil {
@@ -82,9 +85,9 @@ func (c *Client) PostFileMessage(msg *Message) error {
 		return err
 	}
 
-	req, err := http.NewRequest("POST", spark_messages_api, body)
+	req, err := http.NewRequest("POST", SparkMessagesApi, body)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
-	req.Header.Set("Authorization", "Bearer " + c.accessToken)
+	req.Header.Set("Authorization", "Bearer "+c.accessToken)
 
 	var h http.Client
 	resp, err := h.Do(req)
@@ -92,19 +95,20 @@ func (c *Client) PostFileMessage(msg *Message) error {
 
 	if resp.StatusCode != 200 {
 		t, _ := ioutil.ReadAll(resp.Body)
-		return errors.New(fmt.Sprintf("%d - %s", resp.StatusCode, string(t)))
+		return fmt.Errorf("%d - %s", resp.StatusCode, string(t))
 	}
 
-	return nil
+	return err
 }
 
+// Find a spark room id has the specific room name
 func (c *Client) FindRoomIdByName(roomName string) (string, error) {
-	req, err := http.NewRequest("GET", spark_rooms_api, nil)
+	req, err := http.NewRequest("GET", SparkRoomsApi, nil)
 	if err != nil {
 		return "", err
 	}
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	req.Header.Set("Authorization", "Bearer " + c.accessToken)
+	req.Header.Set("Authorization", "Bearer "+c.accessToken)
 
 	var h http.Client
 	resp, err := h.Do(req)
@@ -114,8 +118,8 @@ func (c *Client) FindRoomIdByName(roomName string) (string, error) {
 		return "", err
 	}
 	if resp.StatusCode != 200 {
-		//t, _ := ioutil.ReadAll(resp.Body)
-		return "", errors.New(fmt.Sprintf("%d - %s", resp.StatusCode, c.accessToken))
+		t, _ := ioutil.ReadAll(resp.Body)
+		return "", fmt.Errorf("%d - %s", resp.StatusCode, string(t))
 	}
 
 	var rooms Rooms
@@ -132,5 +136,5 @@ func (c *Client) FindRoomIdByName(roomName string) (string, error) {
 			return room.Id, nil
 		}
 	}
-	return "", errors.New(fmt.Sprintf("spark room '%s' does not exist", roomName))
+	return "", fmt.Errorf("spark room '%s' does not exist", roomName)
 }

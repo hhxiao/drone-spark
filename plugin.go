@@ -10,7 +10,7 @@ type (
 	Repo struct {
 		Owner string
 		Name  string
-		Link string
+		Link  string
 	}
 
 	Build struct {
@@ -43,10 +43,10 @@ type (
 	}
 
 	Plugin struct {
-		Repo    Repo
-		Build   Build
-		Config  Config
-		Job     Job
+		Repo   Repo
+		Build  Build
+		Config Config
+		Job    Job
 	}
 )
 
@@ -68,7 +68,7 @@ func (p Plugin) Exec() error {
 
 	if p.Config.RoomName != "" {
 		roomId, err := client.FindRoomIdByName(p.Config.RoomName)
-		if  err != nil {
+		if err != nil {
 			return err
 		}
 		payload.RoomId = roomId
