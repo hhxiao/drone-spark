@@ -1,5 +1,7 @@
 # drone-spark
 
+[![Join the chat at https://gitter.im/drone-spark/Lobby](https://badges.gitter.im/drone-spark/Lobby.svg)](https://gitter.im/drone-spark/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://drone.io/github.com/hhxiao/drone-spark/status.png)](https://drone.io/github.com/hhxiao/drone-spark/latest)
 [![Go Doc](https://godoc.org/github.com/drone-plugins/drone-slack?status.svg)](http://godoc.org/github.com/hhxiao/drone-spark)
 [![Go Report](https://goreportcard.com/badge/github.com/hhxiao/drone-spark)](https://goreportcard.com/report/github.com/hhxiao/drone-spark)
