@@ -1,0 +1,19 @@
+language: go
+
+go:
+  - 1.6
+  - 1.7
+  - tip
+
+script:
+  - go vet
+  - go test -cover -coverprofile=coverage.out
+  - go build -a -tags netgo
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/aa9497bf4349f4a6366f
+    on_success: change
+    on_failure: always
+    on_start: never
