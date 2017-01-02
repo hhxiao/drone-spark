@@ -1,6 +1,6 @@
 # drone-spark
 
-[![Build Status](https://drone.io/github.com/hhxiao/drone-spark/status.png)](https://drone.io/github.com/hhxiao/drone-spark/latest)
+[![Build Status](https://travis-ci.org/hhxiao/drone-spark.svg?branch=master)](https://travis-ci.org/hhxiao/drone-spark)
 [![Go Doc](https://godoc.org/github.com/drone-plugins/drone-slack?status.svg)](http://godoc.org/github.com/hhxiao/drone-spark)
 [![Go Report](https://goreportcard.com/badge/github.com/hhxiao/drone-spark)](https://goreportcard.com/report/github.com/hhxiao/drone-spark)
 [![MicroBadger](https://images.microbadger.com/badges/image/hhxiao/drone-spark.svg)](https://microbadger.com/images/hhxiao/drone-spark "Get your own image badge on microbadger.com")
@@ -84,4 +84,3 @@ docker run --rm \
 
 ## Reference
 This plugin references a lot from the official **[drone-slack](https://github.com/drone-plugins/drone-slack)** plugin
-
