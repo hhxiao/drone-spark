@@ -20,42 +20,45 @@ func main() {
 		cli.StringFlag{
 			Name:   "auth_token",
 			Usage:  "spark bot auth token",
-			EnvVar: "PLUGIN_AUTH_TOKEN",
+			EnvVar: "PLUGIN_AUTH_TOKEN,SPARK_AUTH_TOKEN",
 		},
 		cli.StringFlag{
 			Name:   "room_id",
 			Usage:  "spark room id",
-			EnvVar: "PLUGIN_ROOM_ID",
+			EnvVar: "PLUGIN_ROOM_ID,SPARK_ROOM_ID",
 		},
 		cli.StringFlag{
 			Name:   "room_name",
 			Usage:  "spark room name",
-			EnvVar: "PLUGIN_ROOM_NAME",
+			EnvVar: "PLUGIN_ROOM_NAME,SPARK_ROOM_NAME",
 		},
 		cli.StringFlag{
 			Name:   "person_email",
 			Usage:  "spark person email",
-			EnvVar: "PLUGIN_PERSON_EMAIL",
+			EnvVar: "PLUGIN_PERSON_EMAIL,SPARK_PERSON_EMAIL",
 		},
 		cli.StringFlag{
 			Name:  "template",
 			Usage: "spark message template",
 			Value: `###Build for [{{repo.owner}}/{{repo.name}}]({{repo.link}}) {{build.status}}!!!
 ####Build Details
+{{#if build.email}}
 * **Author:** <@personEmail:{{build.email}}>
+{{else}}
+* **Author:** {{build.author}}
+{{/if}}
 * **Branch:** {{build.branch}}
-* **Commit:** {{build.commit}}
+* **Build No:** [{{build.number}}]({{build.link}})
+* **Commit:** [{{build.commit}}]({{repo.link}}/commit/{{build.commit}})
 * **Event:** {{build.event}}
 * **Message:** {{build.message}}
-* [Build Log]({{build.link}})
-* [Commit Log]({{repo.link}}/commit/{{build.commit}})
 `,
-			EnvVar: "PLUGIN_TEMPLATE",
+			EnvVar: "PLUGIN_TEMPLATE,SPARK_TEMPLATE",
 		},
 		cli.StringFlag{
 			Name:   "attachment",
 			Usage:  "spark message attachment",
-			EnvVar: "PLUGIN_ATTACHMENT",
+			EnvVar: "PLUGIN_ATTACHMENT,SPARK_ATTACHMENT",
 		},
 		cli.StringFlag{
 			Name:   "repo.owner",

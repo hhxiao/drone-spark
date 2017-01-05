@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/hhxiao/drone-spark/spark"
 	"strings"
@@ -75,7 +76,11 @@ func (p Plugin) Exec() error {
 		payload.RoomId = room.Id
 	}
 
-	if p.Config.Attachment == "" || strings.HasPrefix(p.Config.Attachment, "http") {
+	if payload.ToPersonEmail == "" && payload.RoomId == "" {
+		return errors.New("person_email|room_name|room_id must be specified")
+	}
+
+	if p.Config.Attachment == "" || strings.HasPrefix(p.Config.Attachment, "http://") {
 		return client.PostMessage(&payload)
 	} else {
 		return client.PostFileMessage(&payload)
