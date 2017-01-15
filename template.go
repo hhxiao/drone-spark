@@ -82,19 +82,19 @@ func uppercaseFirst(s string) string {
 	return s
 }
 
-func toDuration(started, finished float64) string {
+func toDuration(started, finished int64) string {
 	return fmt.Sprintln(time.Duration(finished-started) * time.Second)
 }
 
-func toDatetime(timestamp float64, layout, zone string) string {
+func toDatetime(timestamp int64, layout, zone string) string {
 	if len(zone) == 0 {
-		return time.Unix(int64(timestamp), 0).Format(layout)
+		return time.Unix(timestamp, 0).Format(layout)
 	}
 	loc, err := time.LoadLocation(zone)
 	if err != nil {
-		return time.Unix(int64(timestamp), 0).Local().Format(layout)
+		return time.Unix(timestamp, 0).Local().Format(layout)
 	}
-	return time.Unix(int64(timestamp), 0).In(loc).Format(layout)
+	return time.Unix(timestamp, 0).In(loc).Format(layout)
 }
 
 func isSuccess(conditional bool, options *raymond.Options) string {
