@@ -46,7 +46,7 @@ docker run --rm \
   -e DRONE_REPO_NAME=drone_spark \
   -e DRONE_REPO_LINK=https://github.com/hhxiao/drone_spark \
   -e DRONE_COMMIT_BRANCH=master \
-  -e DRONE_COMMIT_REF= refs/heads/master \
+  -e DRONE_COMMIT_REF=refs/heads/master \
   -e DRONE_COMMIT_AUTHOR=hhxiao \
   -e DRONE_COMMIT_AUTHOR_EMAIL=hhxiao@gmail.com \
   -e DRONE_COMMIT_MESSAGE="bug fixing" \
@@ -56,7 +56,6 @@ docker run --rm \
   -e DRONE_TAG=1.0.0 \
   -e PLUGIN_AUTH_TOKEN=################################################ \
   -e PLUGIN_PERSON_EMAIL="hhxiao@gmail.com" \
-  -e PLUGIN_ATTACHMENT=README.md \
   hhxiao/drone-spark
 ```
 
@@ -68,7 +67,7 @@ docker run --rm \
   -e DRONE_REPO_NAME=drone_spark \
   -e DRONE_REPO_LINK=https://github.com/hhxiao/drone_spark \
   -e DRONE_COMMIT_BRANCH=master \
-  -e DRONE_COMMIT_REF= refs/heads/master \
+  -e DRONE_COMMIT_REF=refs/heads/master \
   -e DRONE_COMMIT_AUTHOR=hhxiao \
   -e DRONE_COMMIT_AUTHOR_EMAIL=hhxiao@gmail.com \
   -e DRONE_COMMIT_MESSAGE="bug fixing" \
@@ -78,7 +77,6 @@ docker run --rm \
   -e DRONE_TAG=1.0.0 \
   -e PLUGIN_AUTH_TOKEN=################################################ \
   -e PLUGIN_ROOM_NAME="Build Status Room" \
-  -e PLUGIN_ATTACHMENT=README.md \
   hhxiao/drone-spark
 ```
 

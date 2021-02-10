@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/Sirupsen/logrus"
-	"github.com/joho/godotenv"
-	"github.com/urfave/cli"
 	"os"
+
+	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
+	"github.com/urfave/cli"
 )
 
 var build = "0"
@@ -38,20 +39,30 @@ func main() {
 			EnvVar: "PLUGIN_PERSON_EMAIL,SPARK_PERSON_EMAIL",
 		},
 		cli.StringFlag{
+			Name:   "message",
+			Usage:  "build message",
+			EnvVar: "PLUGIN_MESSAGE",
+		},
+		cli.StringFlag{
 			Name:  "template",
 			Usage: "spark message template",
-			Value: `###Build for [{{repo.owner}}/{{repo.name}}]({{repo.link}}) {{build.status}}!!!
-####Build Details
-{{#if build.email}}
-* **Author:** <@personEmail:{{build.email}}>
-{{else}}
+			Value: `### Build for [{{repo.owner}}/{{repo.name}}]({{repo.link}}) **{{build.status}}**!!!
+{{#equal build.status "failure"}}
+** Drone blames build author ** {{build.author}}
+{{/equal}}
+##### Build Details
+{{#if config.personEmail}}
 * **Author:** {{build.author}}
+{{else}}
+* **Author:** <@personEmail:{{build.email}}>
 {{/if}}
 * **Branch:** {{build.branch}}
 * **Build No:** [{{build.number}}]({{build.link}})
 * **Commit:** [{{build.commit}}]({{repo.link}}/commit/{{build.commit}})
 * **Event:** {{build.event}}
 * **Message:** {{build.message}}
+
+{{config.message}}
 `,
 			EnvVar: "PLUGIN_TEMPLATE,SPARK_TEMPLATE",
 		},
@@ -197,6 +208,7 @@ func run(c *cli.Context) error {
 			PersonEmail: c.String("person_email"),
 			Template:    c.String("template"),
 			Attachment:  c.String("attachment"),
+			Message:     c.String("message"),
 		},
 	}
 	return plugin.Exec()

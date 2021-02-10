@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/aymerick/raymond"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -10,6 +9,8 @@ import (
 	"time"
 	"unicode"
 	"unicode/utf8"
+
+	"github.com/aymerick/raymond"
 )
 
 func init() {

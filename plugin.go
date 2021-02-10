@@ -3,8 +3,9 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/hhxiao/drone-spark/spark"
 	"strings"
+
+	"github.com/hhxiao/drone-spark/spark"
 )
 
 type (
@@ -37,6 +38,7 @@ type (
 		PersonEmail string
 		Template    string
 		Attachment  string
+		Message     string
 	}
 
 	Job struct {
